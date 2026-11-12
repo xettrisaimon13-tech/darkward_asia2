@@ -1,13 +1,13 @@
-FROM node:18-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
-COPY package.json .
-RUN npm install --omit=dev
+RUN npm install --no-package-lock --no-audit --no-fund --omit=dev --omit=optional ws@8.22.0 \
+    && npm cache clean --force
 
-COPY . .
+COPY server.js ./
 
-ENV PORT=10000
 EXPOSE 10000
+ENV NODE_ENV=production
 
 CMD ["node", "server.js"]
